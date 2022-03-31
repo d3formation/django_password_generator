@@ -1,5 +1,23 @@
 from django.shortcuts import render
+from django.http import StreamingHttpResponse
+from wsgiref.util import FileWrapper
+from pathlib import Path
+import mimetypes
+import os
 import random
+
+
+def downloadfile(request):
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    filename = 'psw_list.txt'
+    filepath = base_dir + '/Files/' + filename
+    thefile = filepath
+    filename = os.path.basename(thefile)
+    response = StreamingHttpResponse(FileWrapper(open(thefile, 'r', encoding='utf-8')),
+                                     content_type=mimetypes.guess_type(thefile[0]))
+    response['Content-Length'] = Path(thefile).stat().st_size - len(open(thefile, 'r', encoding='utf-8').readlines())
+    response['Content-Disposition'] = "Attachment;filename=%s" % filename
+    return response
 
 
 def home(request):
@@ -60,6 +78,11 @@ def download(request):
                         for x in range(length):
                             thepassword += random.choice(characters)
                     totalpass.append(thepassword)
+
+            with open('Files/psw_list.txt', 'w', encoding='utf-8') as file:
+                for line in totalpass:
+                    file.write(line + '\n')
+
             return render(request, 'generator/downloadlink.html', {'totalpsw': totalpass})
         else:
             return render(request, 'generator/comeback.html')

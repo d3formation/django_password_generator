@@ -22,4 +22,5 @@ urlpatterns = [
     path('password/', views.password, name='password'),
     path('about/', views.about, name='about'),
     path('download/', views.download, name='downloadlink_name'),
+    path('download/downloadfile/', views.downloadfile, name='downloadfile'),
 ]

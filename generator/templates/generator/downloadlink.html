@@ -9,9 +9,10 @@
     <div class="container text-center">
         <a href="{% url 'home' %}" class="btn btn-warning">Home</a>
         <button onClick="window.location.reload();" class="btn btn-primary">New List</button>
+        <a href="downloadfile"><button class="btn btn-primary">Download</button></a>
         <br>
         {% for psw in totalpsw %}
-            {{ psw }} <br>
+            {{ psw }}<br>
         {% endfor %}
     </div>
 </body>
